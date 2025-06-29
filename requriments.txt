@@ -1,9 +1,6 @@
-scikit-learn
-pandas
 fastapi
-uvicorn
+pytest
+requests
 mlflow
-pydantic
-pytest-cov
-pytest-html
+pandas
 httpx

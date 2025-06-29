@@ -2,7 +2,6 @@ import pytest
 from fastapi.testclient import TestClient
 from app import app  # Make sure your main FastAPI app is in app.py or adjust this import
 
-
 client = TestClient(app)
 
 # ✅ Sample valid payload based on actual model input features
@@ -78,8 +77,8 @@ def test_predict_invalid_payload():
     response = client.post("/predict", json={})
     assert response.status_code == 422  # Pydantic validation error
 
-
-
+# Example model variable; replace with your actual model loading logic if needed
+model = None
 
 @pytest.mark.skipif(model is None, reason="Model not loaded")
 def test_something_that_needs_model():

@@ -3,3 +3,7 @@ pandas
 fastapi
 uvicorn
 mlflow
+pydantic
+pytest-cov
+pytest-html
+httpx

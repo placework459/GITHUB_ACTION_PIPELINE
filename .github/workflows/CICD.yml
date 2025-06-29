@@ -7,9 +7,7 @@ on:
     branches: [main]
 
 env:
-  DOCKER_IMAGE_NAME: namrata
-  HF_SPACE_REPO_URL: https://huggingface.co/spaces/Namratakghodke/Housing_Price
-  SONAR_PROJECT_KEY: placework459_sai
+  SONAR_PROJECT_KEY: placework459_GITHUB_ACTION_PIPELINE
   SONAR_ORGANIZATION: placework459
   SONAR_HOST_URL: https://sonarcloud.io
 

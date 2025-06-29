@@ -4,14 +4,21 @@ import pandas as pd
 import mlflow
 import mlflow.pyfunc
 from pathlib import Path
+    
 
-# === SET CORRECT FILE URI ===
+
 # === SET CORRECT FILE URI ===
 mlruns_path = Path("../training/mlruns").resolve().as_uri()
 mlflow.set_tracking_uri(mlruns_path)
 
 # === MODEL PATH ===
 MODEL_PATH = 'runs:/3d041e75ab894fbf8681689ebf8c237c/model'
+try:
+        return mlflow.pyfunc.load_model(MODEL_PATH)
+    except Exception as e:
+        print(f"❌ Failed to load model: {e}")
+        return None
+        model = load_model()
 
 # === LOAD MODEL ===
 try:

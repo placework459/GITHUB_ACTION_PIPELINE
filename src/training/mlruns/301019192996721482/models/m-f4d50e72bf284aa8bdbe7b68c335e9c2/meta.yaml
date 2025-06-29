@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/karis/project_MLOPS/GITHUB_ACTION_PIPELINE/src/training/mlruns/301019192996721482/models/m-f4d50e72bf284aa8bdbe7b68c335e9c2/artifacts
+creation_timestamp: 1751177620669
+experiment_id: '301019192996721482'
+last_updated_timestamp: 1751177631676
+model_id: m-f4d50e72bf284aa8bdbe7b68c335e9c2
+model_type: ''
+name: model
+source_run_id: 3d041e75ab894fbf8681689ebf8c237c
+status: 2
+status_message: null

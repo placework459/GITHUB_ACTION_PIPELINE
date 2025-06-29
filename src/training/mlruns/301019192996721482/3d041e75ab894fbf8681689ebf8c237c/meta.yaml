@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/karis/project_MLOPS/GITHUB_ACTION_PIPELINE/src/training/mlruns/301019192996721482/3d041e75ab894fbf8681689ebf8c237c/artifacts
+end_time: 1751177632025
+entry_point_name: ''
+experiment_id: '301019192996721482'
+lifecycle_stage: active
+run_id: 3d041e75ab894fbf8681689ebf8c237c
+run_name: learned-owl-911
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1751177618822
+status: 3
+tags: []
+user_id: karis

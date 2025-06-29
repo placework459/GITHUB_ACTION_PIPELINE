@@ -11,7 +11,7 @@ mlruns_path = Path("../training/mlruns").resolve().as_uri()
 mlflow.set_tracking_uri(mlruns_path)
 
 # === MODEL PATH ===
-MODEL_PATH = 'runs:/e999d4c7e18248f29c76479e8a17bf27/model'
+MODEL_PATH = 'runs:/3d041e75ab894fbf8681689ebf8c237c/model'
 
 # === LOAD MODEL ===
 try:

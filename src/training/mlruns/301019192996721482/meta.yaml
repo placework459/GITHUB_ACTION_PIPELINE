@@ -1,0 +1,6 @@
+artifact_location: file:///C:/Users/karis/project_MLOPS/GITHUB_ACTION_PIPELINE/src/training/mlruns/301019192996721482
+creation_time: 1751177617880
+experiment_id: '301019192996721482'
+last_update_time: 1751177617880
+lifecycle_stage: active
+name: churn-prediction

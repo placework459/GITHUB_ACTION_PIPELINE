@@ -1,1 +1,107 @@
-ASDGDVVSDVS
+name: CI Workflow
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  DOCKER_IMAGE_NAME: namrata
+  HF_SPACE_REPO_URL: https://huggingface.co/spaces/Namratakghodke/Housing_Price
+  SONAR_PROJECT_KEY: placework459_sai
+  SONAR_ORGANIZATION: placework459
+  SONAR_HOST_URL: https://sonarcloud.io
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Pytest with coverage
+        run: |
+          pytest --cov=. --cov-report=term
+
+      - name: Install SonarScanner
+        run: |
+          npm install -g sonar-scanner
+
+      - name: Run SonarScanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }} \
+            -Dsonar.organization=${{ env.SONAR_ORGANIZATION }} \
+            -Dsonar.host.url=${{ env.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+      - name: Get Commit hash
+        id: vars
+        run: echo "GIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Build Docker Image with commit hash
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/namrata:${{ env.GIT_SHA }} \
+                       -t ${{ secrets.DOCKER_USERNAME }}/namrata:latest .
+
+      - name: Scan Docker images with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ secrets.DOCKER_USERNAME }}/namrata:${{ env.GIT_SHA }}
+          format: table
+          exit-code: 1
+          severity: "CRITICAL,HIGH"
+
+      - name: Push Docker Image
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker push ${{ secrets.DOCKER_USERNAME }}/namrata:${{ env.GIT_SHA }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/namrata:latest
+
+      - name: Install Git LFS and Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git-lfs
+          git lfs install --system
+
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          
+          echo "Setting remote for Hugging Face Space"
+          git remote add huggingface https://oauth2:${HF_TOKEN}@${HF_SPACE_REPO_URL#https://}
+          git push --force huggingface main
+          echo "Successfully pushed to Hugging Face Space"
+
+      - name: Slack Notification
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo, message, author, job, ref
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
